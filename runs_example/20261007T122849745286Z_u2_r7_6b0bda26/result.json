@@ -1,0 +1,98 @@
+{
+  "artifacts": {
+    "candidate": "candidate.json",
+    "candidate_rational": null,
+    "config": "config.json",
+    "figures": [
+      "convergence.png",
+      "restarts.png"
+    ],
+    "metrics": "metrics.jsonl",
+    "restarts": "restarts",
+    "summary": "summary.html",
+    "verification": null
+  },
+  "best": {
+    "max_abs_residual": 4.6024506664132936e-08,
+    "relative_residual": 3.7633155818235816e-08,
+    "residual_norm": 1.0644263870609809e-07
+  },
+  "claim": "At least one numerical candidate met the configured residual threshold, but no exact identity was verified.",
+  "comparison": {
+    "candidate_rank": 7,
+    "fraction_of_naive_multiplications": 0.875,
+    "interpretation": "The exponent is an arithmetic-complexity comparison for recursive use of this fixed-size identity. It is not a wall-clock speedup claim.",
+    "multiplication_exponent": 2.807354922057604,
+    "naive_rank": 8,
+    "scalar_multiplications_saved": 1
+  },
+  "created_utc": "2026-10-07T12:28:51.589452+00:00",
+  "environment": {
+    "git_commit": null,
+    "machine": "x86_64",
+    "numpy": "2.4.6",
+    "platform": "macOS-12.6.6-x86_64-i386-64bit",
+    "processor": "i386",
+    "python": "3.11.6",
+    "scipy": "1.17.1"
+  },
+  "problem": {
+    "matrix_size": 2,
+    "rank": 7
+  },
+  "project_version": "0.3.0",
+  "run_id": "20261007T122849745286Z_u2_r7_6b0bda26",
+  "runtime_seconds": 0.31321747798938304,
+  "schema_version": 2,
+  "search": {
+    "best_restart": 0,
+    "candidate_tolerance": 1e-06,
+    "completed_restarts": 2,
+    "configured_restarts": 2,
+    "method": "lbfgsb",
+    "numerical_candidates": 2,
+    "reconstruction_attempts": 20,
+    "restart_summaries": [
+      {
+        "best_reconstruction_error": 0.030618056486988413,
+        "candidate_threshold_met": true,
+        "function_evaluations": 129,
+        "iterations": 119,
+        "max_abs_residual": 4.6024506664132936e-08,
+        "objective": 5.665017667358467e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 3.7633155818235816e-08,
+        "residual_norm": 1.0644263870609809e-07,
+        "restart": 0
+      },
+      {
+        "best_reconstruction_error": 0.03010513637545064,
+        "candidate_threshold_met": true,
+        "function_evaluations": 213,
+        "iterations": 192,
+        "max_abs_residual": 4.016964837377877e-08,
+        "objective": 6.054688171993639e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 3.8905938402747846e-08,
+        "residual_norm": 1.1004261149203648e-07,
+        "restart": 1
+      }
+    ],
+    "termination_reason": "configured_restarts_completed",
+    "verified_restart": null
+  },
+  "status": "NUMERICAL_CANDIDATE",
+  "verification": {
+    "reason": "bounded rational reconstruction was attempted for every numerical candidate, but no exact identity passed independent verification",
+    "reconstruction_attempts": 20,
+    "status": "NOT_VERIFIED"
+  }
+}

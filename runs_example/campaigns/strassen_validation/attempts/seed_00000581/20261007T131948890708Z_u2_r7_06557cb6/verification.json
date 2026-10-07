@@ -1,0 +1,13 @@
+{
+  "first_mismatch": null,
+  "matrix_size": 2,
+  "max_abs_residual": "0",
+  "method": "exact-rational",
+  "mismatch_count": 0,
+  "multiplication_exponent": 2.807354922057604,
+  "naive_rank": 8,
+  "passed": true,
+  "rank": 7,
+  "scalar_multiplications_saved": 1,
+  "schema_version": 1
+}

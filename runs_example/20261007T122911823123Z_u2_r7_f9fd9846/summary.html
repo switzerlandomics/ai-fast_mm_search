@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fast_mm result</title>
+<style>
+html { font-size: 16px; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 900px;
+    margin: 48px auto;
+    padding: 0 24px 80px;
+    line-height: 1.55;
+    color: #1d1d1f;
+    background: #fff;
+}
+h1 { margin: 0 0 0.4rem; font-size: 2rem; line-height: 1.15; font-weight: 600; }
+h2 { margin: 3rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid #d2d2d7; font-size: 1.45rem; }
+h3 { margin: 1.8rem 0 0.6rem; font-size: 1.08rem; }
+p { margin: 0.8rem 0; }
+a { color: #06c; }
+.subtitle, .secondary { color: #6e6e73; }
+.subtitle { margin: 0; font-size: 1.05rem; }
+.result-heading { margin: 3rem 0 0.5rem; padding-top: 1.25rem; border-top: 1px solid #d2d2d7; font-size: 1.5rem; font-weight: 600; }
+.status { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #6e6e73; overflow-wrap: anywhere; }
+.equation { font-family: ui-serif, Georgia, "Times New Roman", serif; font-size: 1.08rem; }
+table { width: 100%; margin: 1.25rem 0; border-collapse: collapse; }
+th, td { padding: 0.65rem 0.4rem; border-bottom: 1px solid #e5e5e7; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { width: 42%; padding-left: 0; font-weight: 500; color: #515154; }
+.equation-table { max-width: 620px; }
+.equation-table th { width: 16%; color: #1d1d1f; }
+.matrix-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.matrix { display: inline-table; width: auto; margin: 0.25rem 0 1rem; border-left: 1px solid #86868b; border-right: 1px solid #86868b; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.symbolic-matrix { font-family: ui-serif, Georgia, "Times New Roman", serif; font-style: italic; }
+.matrix td { width: auto; padding: 0.3rem 0.65rem; border: 0; text-align: right; color: #1d1d1f; }
+.matrix-operator { margin-top: 1.4rem; font-size: 1.25rem; }
+figure { margin: 2rem 0; }
+img { display: block; max-width: 100%; height: auto; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #f5f5f7; padding: 0.1rem 0.25rem; }
+</style>
+</head>
+<body>
+<h1>fast_mm</h1>
+<p class="subtitle">Search for finite matrix multiplication identities</p>
+
+<section class="introduction">
+<h2>Why this search matters</h2>
+<p>
+Matrix multiplication is a basic operation used throughout computing,
+including statistics, genomics, graphics and machine learning.
+</p>
+<p>For two 2 × 2 matrices,</p>
+<div class="matrix-row equation-row">
+    <div><table class="matrix symbolic-matrix"><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table></div>
+    <div class="matrix-operator">×</div>
+    <div><table class="matrix symbolic-matrix"><tr><td>e</td><td>f</td></tr><tr><td>g</td><td>h</td></tr></table></div>
+</div>
+<p>the ordinary method computes four output values:</p>
+<p class="equation">ae + bg,&nbsp;&nbsp; af + bh,&nbsp;&nbsp; ce + dg,&nbsp;&nbsp; cf + dh.</p>
+<p>
+Each output requires two multiplications, for a total of
+<strong>8 scalar multiplications</strong>. A rule that uses fewer products can
+change the asymptotic arithmetic cost when applied recursively.
+</p>
+
+<h3>Strassen's exact seven-product construction</h3>
+<p>
+Strassen's result was constructive: he wrote down an exact recipe showing how
+two 2 × 2 matrices can be multiplied using only
+<strong>7 scalar multiplications</strong> instead of the usual 8.
+</p>
+<table class="equation-table"><tr><th>M₁</th><td>(a + d)(e + h)</td></tr>
+<tr><th>M₂</th><td>(c + d)e</td></tr>
+<tr><th>M₃</th><td>a(f − h)</td></tr>
+<tr><th>M₄</th><td>d(g − e)</td></tr>
+<tr><th>M₅</th><td>(a + b)h</td></tr>
+<tr><th>M₆</th><td>(c − a)(e + f)</td></tr>
+<tr><th>M₇</th><td>(b − d)(g + h)</td></tr></table>
+<p>The four entries are reconstructed using additions and subtractions:</p>
+<table class="equation-table"><tr><th>C₁₁</th><td>M₁ + M₄ − M₅ + M₇</td></tr>
+<tr><th>C₁₂</th><td>M₃ + M₅</td></tr>
+<tr><th>C₂₁</th><td>M₂ + M₄</td></tr>
+<tr><th>C₂₂</th><td>M₁ − M₂ + M₃ + M₆</td></tr></table>
+<p>
+So Strassen supplied the exact coefficients needed to perform and verify the
+algorithm, not merely an existence argument.
+</p>
+
+<h3>From an existence proof to an explicit algorithm</h3>
+<p>
+The recent OpenAI result proves the asymptotic upper bound
+</p>
+<p class="equation">ω ≤ 9/4 = 2.25,</p>
+<p>
+which implies that sufficiently efficient finite matrix-multiplication
+decompositions exist. Roughly, for every small <strong>ε &gt; 0</strong>, there
+must be some fixed matrix size <strong>u</strong> admitting an exact
+decomposition with fewer than about
+</p>
+<p class="equation">u<sup>2.25 + ε</sup></p>
+<p>
+products. The proof does not provide the explicit finite coefficients in the
+way Strassen did. That distinction motivates <code>fast_mm</code>.
+</p>
+<p>
+The 2 × 2, rank-7 case is a benchmark. The programme starts from numerical
+coefficients, searches for a low-residual decomposition, proposes exact
+representatives for every promising restart, and checks each proposal with an
+independent exact verifier. A small residual is never treated as a proof.
+</p>
+</section>
+
+
+<p class="result-heading">Result for this run</p>
+<p><strong>Numerical candidate found, but not proved</strong></p>
+<p class="status">NUMERICAL_CANDIDATE</p>
+<p>At least one numerical candidate met the configured residual threshold, but no exact identity was verified.</p>
+<table><tr><th>Problem</th><td>2 × 2 matrix multiplication</td></tr>
+<tr><th>Naive bilinear products</th><td>8</td></tr>
+<tr><th>Candidate bilinear products</th><td>7</td></tr>
+<tr><th>Products saved</th><td>1 (12.5%)</td></tr>
+<tr><th>Scientific status</th><td>NUMERICAL_CANDIDATE</td></tr></table>
+
+<h2>1. What was tested?</h2>
+<p>
+Ordinary 2 × 2 matrix multiplication uses
+<strong>8</strong> bilinear products in the direct method. This run
+searched for a representation using <strong>7</strong>.
+</p>
+<p class="secondary">
+The product count is an arithmetic-complexity quantity. It is not by itself a
+wall-clock speed claim.
+</p>
+
+<h2>2. Worked example using the best numerical candidate</h2>
+
+<div class="matrix-row">
+    <div><h3>A</h3><table class="matrix"><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table></div>
+    <div class="matrix-operator">×</div>
+    <div><h3>B</h3><table class="matrix"><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table></div>
+</div>
+
+<h3>Standard matrix multiplication</h3>
+<table class="matrix"><tr><td>19</td><td>22</td></tr><tr><td>43</td><td>50</td></tr></table>
+
+<h3>Candidate result</h3>
+<table class="matrix"><tr><td>19</td><td>22</td></tr><tr><td>43.000001</td><td>49.999999</td></tr></table>
+
+<h3>Difference</h3>
+<table class="matrix"><tr><td>3.2881e-07</td><td>1.273e-07</td></tr><tr><td>1.4303e-06</td><td>-5.8941e-07</td></tr></table>
+
+<table>
+<tr><th>Candidate bilinear products</th><td>7</td></tr>
+<tr><th>Maximum output error</th><td>1.430265e-06</td></tr>
+<tr><th>Relative output error</th><td>2.201526e-08</td></tr>
+</table>
+
+<p class="secondary">
+This example shows one pair of matrices. It is not the proof. Exact
+verification checks the complete identity independently.
+</p>
+
+
+<h2>3. Complete multiplication identity</h2>
+<p>
+The numerical objective compares the candidate with the complete multiplication
+tensor. Exact verification, when reached, checks every required coefficient with
+exact rational arithmetic.
+</p>
+<table><tr><th>Tensor coefficients tested numerically</th><td>64</td></tr>
+<tr><th>Expected non-zero coefficients</th><td>8</td></tr>
+<tr><th>Expected zero coefficients</th><td>56</td></tr>
+<tr><th>Residual norm</th><td>1.037595e-07</td></tr>
+<tr><th>Relative residual</th><td>3.668453e-08</td></tr>
+<tr><th>Maximum coefficient error</th><td>2.809298e-08</td></tr>
+<tr><th>Candidate threshold</th><td>1.000000e-06</td></tr></table>
+
+<h2>4. Exactification and verification</h2>
+<table><tr><th>Numerical candidates</th><td>7</td></tr>
+<tr><th>Exact reconstruction</th><td>ATTEMPTED</td></tr>
+<tr><th>Reconstruction proposals tested</th><td>70</td></tr>
+<tr><th>Exact identity verification</th><td>NOT VERIFIED</td></tr>
+<tr><th>Verified restart</th><td>none</td></tr>
+<tr><th>Scientific conclusion</th><td>NUMERICAL_CANDIDATE</td></tr></table>
+<p>At least one restart reached the numerical threshold, but none of the configured rational reconstruction proposals passed exact verification. This is not a proof.</p>
+
+<h2>5. Recursive interpretation</h2>
+<p>
+A verified 2 × 2 identity using 7 products has
+recursive arithmetic exponent <strong>2.80735492</strong>, given by
+<code>log(rank) / log(matrix_size)</code>. The direct method has exponent 3.
+</p>
+<table>
+<thead><tr><th>Matrix size</th><th>Naive recursive products</th><th>7-product recursion</th></tr></thead>
+<tbody><tr><td>2</td><td>8</td><td>7</td></tr><tr><td>4</td><td>64</td><td>49</td></tr><tr><td>8</td><td>512</td><td>343</td></tr><tr><td>16</td><td>4,096</td><td>2,401</td></tr><tr><td>32</td><td>32,768</td><td>16,807</td></tr></tbody>
+</table>
+
+<h2>6. Search behaviour</h2>
+<table><tr><th>Method</th><td>lbfgsb</td></tr>
+<tr><th>Configured restarts</th><td>8</td></tr>
+<tr><th>Completed restarts</th><td>8</td></tr>
+<tr><th>Best numerical restart</th><td>5</td></tr>
+<tr><th>Numerical candidates</th><td>7</td></tr>
+<tr><th>Reconstruction proposals tested</th><td>70</td></tr>
+<tr><th>Termination</th><td>All configured restarts completed.</td></tr>
+<tr><th>Runtime</th><td>4.38437 s</td></tr></table>
+<figure><img src="convergence.png" alt="convergence.png"></figure>
+<figure><img src="restarts.png" alt="restarts.png"></figure>
+
+<h2>7. Reproducibility</h2>
+<table><tr><th>Run ID</th><td>20261007T122911823123Z_u2_r7_f9fd9846</td></tr>
+<tr><th>Project version</th><td>0.3.0</td></tr>
+<tr><th>Git commit</th><td>not available</td></tr>
+<tr><th>Python</th><td>3.11.6</td></tr>
+<tr><th>NumPy</th><td>2.4.6</td></tr>
+<tr><th>SciPy</th><td>1.17.1</td></tr>
+<tr><th>Platform</th><td>macOS-12.6.6-x86_64-i386-64bit</td></tr>
+<tr><th>Machine</th><td>x86_64</td></tr></table>
+<h3>Run artefacts</h3>
+<ul><li><a href="config.json">Configuration</a></li><li><a href="candidate.json">Best numerical candidate</a></li><li><a href="metrics.jsonl">Metrics</a></li></ul>
+<p class="secondary">
+Every numerical restart is retained under <code>restarts/</code>. Exact files are
+written only for identities that pass the independent verifier.
+</p>
+
+<h2>8. Technical interpretation</h2>
+<p>At least one numerical candidate met the configured residual threshold, but no exact identity was verified.</p>
+<p>
+The candidate arithmetic exponent describes recursive arithmetic complexity. It
+does not imply the same improvement in practical CPU or GPU execution time.
+</p>
+</body>
+</html>

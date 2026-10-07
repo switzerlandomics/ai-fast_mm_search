@@ -1,0 +1,9 @@
+{
+  "best_relative_residual": 3.0932993993406683e-08,
+  "completed_utc": "2026-10-07T13:19:51.516148+00:00",
+  "result": "runs/campaigns/strassen_validation/attempts/seed_00000581/20261007T131948890708Z_u2_r7_06557cb6/result.json",
+  "run": "runs/campaigns/strassen_validation/attempts/seed_00000581/20261007T131948890708Z_u2_r7_06557cb6",
+  "schema_version": 1,
+  "seed": 581,
+  "status": "VERIFIED"
+}

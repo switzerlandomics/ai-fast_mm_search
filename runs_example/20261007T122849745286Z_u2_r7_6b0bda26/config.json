@@ -1,0 +1,35 @@
+{
+  "metrics": {
+    "enabled": true,
+    "interval": 10,
+    "live": true,
+    "plots": true
+  },
+  "output": {
+    "root": "runs"
+  },
+  "problem": {
+    "matrix_size": 2,
+    "rank": 7
+  },
+  "reconstruction": {
+    "enabled": true,
+    "include_unscaled": true,
+    "max_denominator": 16,
+    "method": "rational",
+    "normalise_term_scales": true,
+    "tolerance": 1e-08
+  },
+  "search": {
+    "candidate_tolerance": 1e-06,
+    "ftol": 1e-15,
+    "gtol": 1e-10,
+    "initial_scale": 0.5,
+    "max_iterations": 500,
+    "max_line_search_steps": 50,
+    "method": "lbfgsb",
+    "restarts": 2,
+    "seed": 1,
+    "stop_on_verified": true
+  }
+}

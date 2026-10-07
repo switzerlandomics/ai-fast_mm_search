@@ -1,0 +1,9 @@
+{
+  "name": "strassen_validation",
+  "run_config": "strassen_search.json",
+  "attempts_per_session": 3600,
+  "attempt_restarts": 1,
+  "start_seed": 1,
+  "state_root": "runs/campaigns",
+  "stop_status": "VERIFIED"
+}

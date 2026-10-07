@@ -1,0 +1,19 @@
+{
+  "attempts_completed": 581,
+  "best_relative_residual": 1.5960607265831613e-08,
+  "best_run": "runs/campaigns/strassen_validation/attempts/seed_00000482/20261007T131201726680Z_u2_r7_2d732c7d",
+  "campaign_name": "strassen_validation",
+  "campaign_signature": "31ef4fef2516f46fd03280ccb0e265cf4a7da010befa497852fe6fb5bde77f6f",
+  "created_utc": "2026-10-07T12:30:20.585352+00:00",
+  "last_completed_seed": 581,
+  "last_error": null,
+  "last_result": "runs/campaigns/strassen_validation/attempts/seed_00000581/20261007T131948890708Z_u2_r7_06557cb6/result.json",
+  "last_status": "VERIFIED",
+  "next_seed": 582,
+  "project_version": "0.3.0",
+  "schema_version": 1,
+  "updated_utc": "2026-10-07T13:19:51.917050+00:00",
+  "verified": true,
+  "verified_run": "runs/campaigns/strassen_validation/attempts/seed_00000581/20261007T131948890708Z_u2_r7_06557cb6",
+  "verified_seed": 581
+}

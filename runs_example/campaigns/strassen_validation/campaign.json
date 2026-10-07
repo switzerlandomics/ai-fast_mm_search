@@ -1,0 +1,44 @@
+{
+  "campaign": {
+    "attempt_restarts": 1,
+    "attempts_per_session": 3600,
+    "name": "strassen_validation",
+    "run_config": "strassen_search.json",
+    "start_seed": 1,
+    "state_root": "runs/campaigns",
+    "stop_status": "VERIFIED"
+  },
+  "campaign_config": "configs/strassen_campaign.json",
+  "campaign_signature": "31ef4fef2516f46fd03280ccb0e265cf4a7da010befa497852fe6fb5bde77f6f",
+  "project_version": "0.3.0",
+  "schema_version": 1,
+  "scientific_signature_payload": {
+    "attempt_restarts": 1,
+    "problem": {
+      "matrix_size": 2,
+      "rank": 7
+    },
+    "project_version": "0.3.0",
+    "reconstruction": {
+      "enabled": true,
+      "include_unscaled": true,
+      "max_denominator": 16,
+      "method": "rational",
+      "normalise_term_scales": true,
+      "tolerance": 1e-08
+    },
+    "search": {
+      "candidate_tolerance": 1e-06,
+      "ftol": 1e-15,
+      "gtol": 1e-10,
+      "initial_scale": 0.5,
+      "max_iterations": 3000,
+      "max_line_search_steps": 50,
+      "method": "lbfgsb",
+      "restarts": 1,
+      "seed": 0,
+      "stop_on_verified": true
+    },
+    "stop_status": "VERIFIED"
+  }
+}

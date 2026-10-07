@@ -1,0 +1,79 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.python-version
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checking and linting
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# Logs and runtime state
+*.log
+logs/
+checkpoints/
+tmp/
+temp/
+.cache/
+
+# Generated experiment runs and reports
+runs/
+outputs/
+reports/
+plots/
+figures/
+
+# Large numerical artefacts
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.parquet
+
+# Curated results are tracked explicitly
+results/*
+!results/README.md
+!results/verified/
+!results/verified/**

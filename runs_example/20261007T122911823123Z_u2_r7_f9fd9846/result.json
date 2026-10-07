@@ -1,0 +1,192 @@
+{
+  "artifacts": {
+    "candidate": "candidate.json",
+    "candidate_rational": null,
+    "config": "config.json",
+    "figures": [
+      "convergence.png",
+      "restarts.png"
+    ],
+    "metrics": "metrics.jsonl",
+    "restarts": "restarts",
+    "summary": "summary.html",
+    "verification": null
+  },
+  "best": {
+    "max_abs_residual": 2.8092981274596696e-08,
+    "relative_residual": 3.6684527767185446e-08,
+    "residual_norm": 1.0375951339521212e-07
+  },
+  "claim": "At least one numerical candidate met the configured residual threshold, but no exact identity was verified.",
+  "comparison": {
+    "candidate_rank": 7,
+    "fraction_of_naive_multiplications": 0.875,
+    "interpretation": "The exponent is an arithmetic-complexity comparison for recursive use of this fixed-size identity. It is not a wall-clock speedup claim.",
+    "multiplication_exponent": 2.807354922057604,
+    "naive_rank": 8,
+    "scalar_multiplications_saved": 1
+  },
+  "created_utc": "2026-10-07T12:29:17.707447+00:00",
+  "environment": {
+    "git_commit": null,
+    "machine": "x86_64",
+    "numpy": "2.4.6",
+    "platform": "macOS-12.6.6-x86_64-i386-64bit",
+    "processor": "i386",
+    "python": "3.11.6",
+    "scipy": "1.17.1"
+  },
+  "problem": {
+    "matrix_size": 2,
+    "rank": 7
+  },
+  "project_version": "0.3.0",
+  "run_id": "20261007T122911823123Z_u2_r7_f9fd9846",
+  "runtime_seconds": 4.384365277015604,
+  "schema_version": 2,
+  "search": {
+    "best_restart": 4,
+    "candidate_tolerance": 1e-06,
+    "completed_restarts": 8,
+    "configured_restarts": 8,
+    "method": "lbfgsb",
+    "numerical_candidates": 7,
+    "reconstruction_attempts": 70,
+    "restart_summaries": [
+      {
+        "best_reconstruction_error": 0.030618056486988413,
+        "candidate_threshold_met": true,
+        "function_evaluations": 129,
+        "iterations": 119,
+        "max_abs_residual": 4.6024506664132936e-08,
+        "objective": 5.665017667358467e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 3.7633155818235816e-08,
+        "residual_norm": 1.0644263870609809e-07,
+        "restart": 0
+      },
+      {
+        "best_reconstruction_error": 0.03010513637545064,
+        "candidate_threshold_met": true,
+        "function_evaluations": 213,
+        "iterations": 192,
+        "max_abs_residual": 4.016964837377877e-08,
+        "objective": 6.054688171993639e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 3.8905938402747846e-08,
+        "residual_norm": 1.1004261149203648e-07,
+        "restart": 1
+      },
+      {
+        "best_reconstruction_error": 0.02755731285110241,
+        "candidate_threshold_met": true,
+        "function_evaluations": 275,
+        "iterations": 258,
+        "max_abs_residual": 5.179900189333786e-08,
+        "objective": 8.830823251573147e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 4.698623003490795e-08,
+        "residual_norm": 1.3289712752029778e-07,
+        "restart": 2
+      },
+      {
+        "candidate_threshold_met": false,
+        "function_evaluations": 3173,
+        "iterations": 3000,
+        "max_abs_residual": 2.792224465864024e-06,
+        "objective": 1.534667436700481e-11,
+        "optimizer_message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+        "optimizer_success": false,
+        "reconstruction_attempts": 0,
+        "reconstruction_status": "NOT_ATTEMPTED",
+        "relative_residual": 1.958741583709092e-06,
+        "residual_norm": 5.540157825731106e-06,
+        "restart": 3
+      },
+      {
+        "best_reconstruction_error": 0.028119827063465448,
+        "candidate_threshold_met": true,
+        "function_evaluations": 284,
+        "iterations": 262,
+        "max_abs_residual": 2.8092981274596696e-08,
+        "objective": 5.383018310005602e-15,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 3.6684527767185446e-08,
+        "residual_norm": 1.0375951339521212e-07,
+        "restart": 4
+      },
+      {
+        "best_reconstruction_error": 0.02430165843812318,
+        "candidate_threshold_met": true,
+        "function_evaluations": 432,
+        "iterations": 408,
+        "max_abs_residual": 7.984802493938431e-08,
+        "objective": 1.7005951385273218e-14,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 6.520343431383277e-08,
+        "residual_norm": 1.844231622398511e-07,
+        "restart": 5
+      },
+      {
+        "best_reconstruction_error": 0.03064018590571612,
+        "candidate_threshold_met": true,
+        "function_evaluations": 1102,
+        "iterations": 1042,
+        "max_abs_residual": 2.1686741512707067e-07,
+        "objective": 5.732085620127184e-14,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 1.1970887206183993e-07,
+        "residual_norm": 3.3858782081247945e-07,
+        "restart": 6
+      },
+      {
+        "best_reconstruction_error": 0.024646527591097644,
+        "candidate_threshold_met": true,
+        "function_evaluations": 539,
+        "iterations": 503,
+        "max_abs_residual": 7.840091624695955e-08,
+        "objective": 1.5361889897607168e-14,
+        "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "optimizer_success": true,
+        "reconstruction_attempts": 10,
+        "reconstruction_status": "NOT_VERIFIED",
+        "reconstruction_within_tolerance": false,
+        "relative_residual": 6.19715456834973e-08,
+        "residual_norm": 1.7528200077365143e-07,
+        "restart": 7
+      }
+    ],
+    "termination_reason": "configured_restarts_completed",
+    "verified_restart": null
+  },
+  "status": "NUMERICAL_CANDIDATE",
+  "verification": {
+    "reason": "bounded rational reconstruction was attempted for every numerical candidate, but no exact identity passed independent verification",
+    "reconstruction_attempts": 70,
+    "status": "NOT_VERIFIED"
+  }
+}

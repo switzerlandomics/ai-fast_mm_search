@@ -1,0 +1,9 @@
+{
+  "best_relative_residual": 3.7633155818235816e-08,
+  "completed_utc": "2026-10-07T12:30:23.079380+00:00",
+  "result": "runs/campaigns/strassen_validation/attempts/seed_00000001/20261007T123021661085Z_u2_r7_5256430b/result.json",
+  "run": "runs/campaigns/strassen_validation/attempts/seed_00000001/20261007T123021661085Z_u2_r7_5256430b",
+  "schema_version": 1,
+  "seed": 1,
+  "status": "NUMERICAL_CANDIDATE"
+}

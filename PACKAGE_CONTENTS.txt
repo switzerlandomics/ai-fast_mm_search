@@ -1,0 +1,25 @@
+fast_mm resumable campaign update v0.3.0
+
+This archive contains full replacement copies of the runner, project metadata,
+configs, Python package modules, exact Strassen baseline, and complete tests.
+It intentionally does not replace README.md, README_SPYDER.md, VALIDATION.md,
+docs/, runs/, or other user documentation/data.
+
+Validation performed before packaging:
+- Python compileall: passed
+- pytest: 33 passed
+- exact Strassen baseline verification: passed
+- real campaign integration: two sessions advanced seeds 1,2 then 3,4;
+  next_seed became 5 without repeating completed attempts
+
+Important campaign behavior:
+- each durable campaign attempt contains one independent numerical restart
+- state is written atomically after every completed attempt
+- completed result directories are immutable
+- if interrupted after a result but before state commit, the result is reconciled
+  on the next launch rather than recomputed
+- if interrupted during the active restart, that seed is retried; previous seeds
+  are not repeated
+- ERROR does not advance the seed
+- VERIFIED stops the campaign immediately
+- changing scientific search settings requires a new campaign name

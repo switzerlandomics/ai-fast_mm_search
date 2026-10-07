@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fast_mm verified discovery</title>
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+    }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+html { font-size: 16px; }
+body {
+    max-width: 900px;
+    margin: 48px auto;
+    padding: 0 24px 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1d1d1f;
+    line-height: 1.55;
+}
+h1 { font-size: 2rem; margin-bottom: .4rem; }
+h2 { font-size: 1.4rem; margin-top: 2.8rem; padding-top: 1rem; border-top: 1px solid #ddd; }
+p { margin: .8rem 0; }
+.status { font-weight: 600; }
+.secondary { color: #6e6e73; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.5rem; }
+th, td { padding: .55rem .4rem; border-bottom: 1px solid #e5e5e7; text-align: left; vertical-align: top; }
+th { width: 36%; font-weight: 500; }
+.formula th { width: 12%; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+pre { overflow-x: auto; background: #f5f5f7; padding: 1rem; }
+.matrix { width: auto; display: inline-table; border-left: 1px solid #888; border-right: 1px solid #888; }
+.matrix td { border: 0; text-align: right; min-width: 2.2rem; }
+.matrix-row { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+.math-block { overflow-x: auto; margin: 1.1rem 0; }
+.algorithm-step { margin: 1.8rem 0; }
+.algorithm-step h3 { margin-bottom: .5rem; }
+.result-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.result-card { padding: 0 1rem 1rem; border: 1px solid #e5e5e7; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<h1>fast_mm verified discovery</h1>
+<p class="status">VERIFIED</p>
+<p>
+An exact 2 × 2 matrix-multiplication identity using
+<strong>7</strong> scalar products was independently verified with exact
+rational arithmetic.
+</p>
+
+<table><tr><th>Matrix size</th><td>2 × 2</td></tr><tr><th>Naive scalar products</th><td>8</td></tr><tr><th>Discovered scalar products</th><td>7</td></tr><tr><th>Products saved at the base size</th><td>1</td></tr><tr><th>Recursive arithmetic exponent</th><td>2.807354922</td></tr><tr><th>Search seed</th><td>581</td></tr><tr><th>Numerical residual before exactification</th><td>3.093299e-08</td></tr><tr><th>Exact reconstruction attempts</th><td>1</td></tr><tr><th>Exact verifier mismatches</th><td>0</td></tr></table>
+
+<p>This verified rule matches the recursive arithmetic exponent of Strassen&#x27;s 2 × 2, rank-7 construction.</p>
+
+<h2>The discovered algorithm</h2>
+<p>
+Write the two input matrices as
+</p>
+
+<div class="math-block">\[A=\begin{pmatrix}a & b \\ c & d\end{pmatrix},\qquad B=\begin{pmatrix}e & f \\ g & h\end{pmatrix}\]</div>
+
+<p>
+Ordinary matrix multiplication would produce
+</p>
+
+<div class="math-block">\[AB=\begin{pmatrix}ae + bg & af + bh \\ ce + dg & cf + dh\end{pmatrix}\]</div>
+
+<p>
+The discovered rule reaches the same result using
+<strong>7 bilinear products</strong> instead of 8.
+</p>
+
+<div class="algorithm-step">
+<h3>Step 1. Compute the 7 products</h3>
+<div class="math-block">\[\begin{aligned}P_{1} = \left(b - d\right)\left(h\right) \\ P_{2} = \left(a\right)\left(e + f + g + h\right) \\ P_{3} = \left(a - b\right)\left(g + h\right) \\ P_{4} = \left(a - c\right)\left(f\right) \\ P_{5} = \left(c - d\right)\left(e\right) \\ P_{6} = \left(d\right)\left(e + g\right) \\ P_{7} = \left(a - d\right)\left(e + g + h\right)\end{aligned}\]</div>
+</div>
+
+<div class="algorithm-step">
+<h3>Step 2. Assemble the output matrix</h3>
+<div class="math-block">\[C=AB=\begin{pmatrix}-P_{1} - P_{3} + P_{6} + P_{7} & P_{1} + P_{2} - P_{6} - P_{7} \\ P_{5} + P_{6} & P_{2} - P_{4} - P_{6} - P_{7}\end{pmatrix}\]</div>
+</div>
+
+<p>
+Those two steps are the complete discovered multiplication algorithm.
+The equations are generated directly from the exact verified coefficient
+matrices, so the same presentation works for any future verified
+<em>u</em> × <em>u</em>, rank-<em>r</em> discovery.
+</p>
+
+<h2>A concrete check</h2>
+<p>For the example below, ordinary multiplication gives:</p>
+
+<div class="matrix-row">
+<div><table class="matrix"><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table></div>
+<div>×</div>
+<div><table class="matrix"><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table></div>
+<div>=</div>
+<div><table class="matrix"><tr><td>19</td><td>22</td></tr><tr><td>43</td><td>50</td></tr></table></div>
+</div>
+
+<p>The discovered algorithm gives:</p>
+
+<div class="matrix-row">
+<div><table class="matrix"><tr><td>19</td><td>22</td></tr><tr><td>43</td><td>50</td></tr></table></div>
+</div>
+
+<p><strong>The two results are exactly identical.</strong></p>
+
+<p class="secondary">
+This numerical example is only illustrative. The proof is the exact
+coefficient-by-coefficient verification recorded above.
+</p>
+
+<h2>Why the small rule matters</h2>
+<p>
+The same fixed rule can be applied recursively to blocks of larger matrices.
+The arithmetic multiplication counts therefore compound.
+</p>
+
+<table>
+<thead>
+<tr>
+<th>Matrix size</th>
+<th>Naive products</th>
+<th>Discovered-rule products</th>
+<th>Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>2</td><td>8</td><td>7</td><td>12.5%</td></tr><tr><td>4</td><td>64</td><td>49</td><td>23.4%</td></tr><tr><td>8</td><td>512</td><td>343</td><td>33.0%</td></tr><tr><td>16</td><td>4,096</td><td>2,401</td><td>41.4%</td></tr><tr><td>32</td><td>32,768</td><td>16,807</td><td>48.7%</td></tr>
+</tbody>
+</table>
+
+<h2>Standard multiplication versus the discovered algorithm</h2>
+<p>
+The code below implements the ordinary matrix product and the discovered rule
+separately, evaluates both on the same matrices, prints both results, and
+checks that they are exactly equal. <code>Fraction</code> keeps rational
+coefficients exact.
+</p>
+
+<pre>from fractions import Fraction as F
+
+u = 2
+L = [
+    [0, 1, 0, -1],
+    [1, 0, 0, 0],
+    [1, -1, 0, 0],
+    [1, 0, -1, 0],
+    [0, 0, 1, -1],
+    [0, 0, 0, 1],
+    [1, 0, 0, -1]
+]
+R = [
+    [0, 0, 0, 1],
+    [1, 1, 1, 1],
+    [0, 0, 1, 1],
+    [0, 1, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 1, 0],
+    [1, 0, 1, 1]
+]
+O = [
+    [-1, 1, 0, 0],
+    [0, 1, 0, 1],
+    [-1, 0, 0, 0],
+    [0, 0, 0, -1],
+    [0, 0, 1, 0],
+    [1, -1, 1, -1],
+    [1, -1, 0, -1]
+]
+
+
+def standard_mm(A, B):
+    return [
+        [
+            sum(F(A[i][k]) * F(B[k][j]) for k in range(u))
+            for j in range(u)
+        ]
+        for i in range(u)
+    ]
+
+
+def discovered_mm(A, B):
+    a = [F(x) for row in A for x in row]
+    b = [F(x) for row in B for x in row]
+
+    products = [
+        sum(L[k][i] * a[i] for i in range(u * u))
+        * sum(R[k][i] * b[i] for i in range(u * u))
+        for k in range(len(L))
+    ]
+
+    c = [
+        sum(O[k][j] * products[k] for k in range(len(L)))
+        for j in range(u * u)
+    ]
+
+    return [c[i * u:(i + 1) * u] for i in range(u)]
+
+
+def show_matrix(name, matrix):
+    print(name)
+    for row in matrix:
+        print(&quot;   &quot;, [str(value) for value in row])
+
+
+A = [[1, 2], [3, 4]]
+B = [[5, 6], [7, 8]]
+
+standard_result = standard_mm(A, B)
+discovered_result = discovered_mm(A, B)
+
+show_matrix(&quot;A&quot;, A)
+show_matrix(&quot;B&quot;, B)
+show_matrix(&quot;Standard multiplication A @ B&quot;, standard_result)
+show_matrix(&quot;Discovered algorithm&quot;, discovered_result)
+
+print(&quot;Match:&quot;, standard_result == discovered_result)
+assert discovered_result == standard_result
+</pre>
+
+<h2>Verification and provenance</h2>
+<table><tr><th>Status</th><td>VERIFIED</td></tr><tr><th>Verification method</th><td>exact-rational</td></tr><tr><th>Mismatch count</th><td>0</td></tr><tr><th>Maximum exact residual</th><td>0</td></tr><tr><th>Run ID</th><td>20261007T131948890708Z_u2_r7_06557cb6</td></tr><tr><th>Source run</th><td>runs/campaigns/strassen_validation/attempts/seed_00000581/20261007T131948890708Z_u2_r7_06557cb6</td></tr><tr><th>Project version</th><td>0.3.0</td></tr></table>
+
+<p class="secondary">
+Arithmetic-product counts and recursive exponents are theoretical complexity
+measures. They do not by themselves establish a wall-clock speed improvement
+on a CPU or GPU.
+</p>
+
+</body>
+</html>
