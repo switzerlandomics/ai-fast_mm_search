@@ -1,0 +1,285 @@
+\documentclass[12pt]{article}
+
+%%%% Core %%%%
+
+\usepackage{authblk}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small}
+
+%%%% Page layout %%%%
+
+\usepackage[verbose=true,letterpaper]{geometry}
+\geometry{
+    textheight=9in,
+    textwidth=6in,
+    top=1in,
+    bottom=1in,
+    headheight=12pt,
+    headsep=25pt,
+    footskip=30pt,
+}
+
+\setstretch{1.2}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+%%%% Bibliography %%%%
+
+\usepackage{natbib}
+\setcitestyle{numbers,sort&compress}
+\usepackage{hypernat}
+
+%%%% Links %%%%
+
+\usepackage{xcolor}
+\definecolor{natureblue}{RGB}{5,110,210}
+
+\usepackage[colorlinks]{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=natureblue,
+    citecolor=natureblue,
+    filecolor=blue!50!black,
+    urlcolor=natureblue,
+    pdftitle={
+       Automated search recovers exact rank-7 matrix multiplication
+    },
+    pdfauthor={Dylan Lawless},
+    pdfsubject={
+        Matrix multiplication, bilinear algorithms,
+        numerical optimisation and exact verification
+    },
+    pdfkeywords={
+        matrix multiplication,
+        bilinear algorithms,
+        tensor decomposition,
+        Strassen algorithm,
+        numerical optimisation,
+        exact verification
+    }
+}
+
+%%%% Document %%%%
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\title{
+Automated search recovers exact rank-7 matrix multiplication
+}
+
+
+%%%% Author and affiliations %%%%
+
+\newcommand{\QUANT}{1}
+\newcommand{\UZH}{2}
+\newcommand{\SO}{3}
+
+\author[\QUANT,\UZH,\SO]{Dylan Lawless}
+
+\affil[\QUANT]{Quantitative Omics Epidemiology Group}
+\affil[\UZH]{University of Zurich, Zurich, Switzerland}
+\affil[\SO]{Switzerland Omics, Zurich, Switzerland}
+
+\date{7 October 2026}
+
+\maketitle
+\begin{abstract}
+Recent work proving that the matrix-multiplication exponent satisfies
+$\omega \leq 9/4$ motivates the search for explicit finite algorithms
+with improved recursive complexity. We present
+\texttt{fast\_mm\_search}, a numerical-to-exact procedure that searches
+for bilinear matrix-multiplication decompositions from random
+coefficients, reconstructs exact identities, and verifies them using
+exact arithmetic. As a controlled validation, we specified only the
+$2\times2$, rank-7 problem and withheld Strassen's known construction.
+The search recovered an exact seven-product algorithm with integer
+coefficients and a representation different from the standard
+Strassen formula. Exact rational verification established equality
+for all 64 coefficients of the multiplication tensor. This blind
+recovery demonstrates that exact finite matrix-multiplication
+algorithms can be recovered automatically and provides a validated
+procedure for searching finite $(u,r)$ decompositions whose explicit
+solutions are unknown.
+\end{abstract}
+
+
+\section{Introduction}
+
+Strassen showed that $2\times2$ matrix multiplication can be computed
+with seven bilinear products instead of the eight used by the direct
+algorithm \cite{strassen1969}. Recursive application gives arithmetic
+exponent
+\[
+\log_2 7 \simeq 2.80735.
+\]
+
+Recent work proves the stronger asymptotic bound
+\[
+\omega \leq \frac{9}{4}
+\]
+over $\mathbb{C}$ \cite{openai2026}. This motivates the constructive
+search for explicit finite matrix-multiplication decompositions with
+improved recursive complexity.
+
+We developed \texttt{fast\_mm\_search} to search for such
+decompositions numerically, reconstruct candidate coefficients
+exactly, and verify the resulting identities independently. The
+$2\times2$, rank-7 problem provides a controlled validation because
+an exact solution is known while its coefficients are withheld from
+the search.
+
+\section{Methods}
+
+Let
+\[
+T \in \mathbb{Q}^{4\times4\times4}
+\]
+denote the tensor for $2\times2$ matrix multiplication. A rank-$r$
+bilinear algorithm has the decomposition
+\[
+\widehat{T}
+=
+\sum_{k=1}^{r}
+u_k \otimes v_k \otimes w_k,
+\]
+where $u_k$ and $v_k$ define linear forms in the entries of the two
+input matrices and $w_k$ distributes each bilinear product among the
+output entries.
+
+We fixed $r=7$ and optimised the coefficients from independent random
+initial values using L-BFGS-B. Candidates were ranked by relative
+tensor residual
+\[
+\rho
+=
+\frac{\lVert T-\widehat{T}\rVert_F}
+     {\lVert T\rVert_F}.
+\]
+
+Candidates reaching the numerical threshold were term-normalised,
+reconstructed as rational coefficients, and passed to a separate
+verifier using exact rational arithmetic. Numerical optimisation
+selects candidates; exact tensor equality determines acceptance.
+
+\section{Results}
+
+The campaign evaluated 581 independent random initialisations. The
+lowest numerical residual,
+\[
+1.596061\times10^{-8},
+\]
+occurred at seed 482 and did not yield an exact verified identity.
+Seed 581 converged after 140 L-BFGS-B iterations to
+\[
+\rho = 3.093299\times10^{-8}.
+\]
+Exact reconstruction produced coefficients with denominator one.
+
+For
+\[
+A=
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix},
+\qquad
+B=
+\begin{pmatrix}
+e & f\\
+g & h
+\end{pmatrix},
+\]
+the recovered algorithm computes
+\[
+\begin{aligned}
+P_1 &= (b-d)h, &
+P_2 &= a(e+f+g+h),\\
+P_3 &= (a-b)(g+h), &
+P_4 &= (a-c)f,\\
+P_5 &= (c-d)e, &
+P_6 &= d(e+g),\\
+P_7 &= (a-d)(e+g+h),
+\end{aligned}
+\]
+and reconstructs
+\[
+AB=
+\begin{pmatrix}
+-P_1-P_3+P_6+P_7 &
+P_1+P_2-P_6-P_7\\
+P_5+P_6 &
+P_2-P_4-P_6-P_7
+\end{pmatrix}.
+\]
+
+Expansion gives
+\[
+AB=
+\begin{pmatrix}
+ae+bg & af+bh\\
+ce+dg & cf+dh
+\end{pmatrix}.
+\]
+
+Exact verification evaluated all
+\[
+4\times4\times4=64
+\]
+coefficients of the multiplication tensor. All coefficients matched,
+giving zero mismatches and maximum exact residual zero.
+
+\section{Discussion}
+
+The recovered identity attains the classical rank-7 bound for
+$2\times2$ matrix multiplication. Its coefficient representation
+differs from the standard presentation of Strassen's construction,
+and it was recovered from random initial coefficients without access
+to Strassen's formula.
+
+The campaign also separates numerical approximation from mathematical
+verification. Seed 482 attained the lowest floating-point residual,
+while seed 581 produced the first exactly reconstructable identity.
+The numerical objective alone therefore does not determine whether a
+candidate admits the exact representation required for proof.
+
+This experiment validates the numerical search, exact reconstruction,
+and independent verification pipeline. The same procedure can now be
+applied to finite $(u,r)$ problems whose explicit decompositions are
+unknown.
+
+\section*{Code availability}
+
+Source code, configurations, and complete run artefacts are available at \\
+\href{https://github.com/switzerlandomics/ai-fast_mm_search}
+{github.com/switzerlandomics/ai-fast\_mm\_search}.
+
+\begin{thebibliography}{9}
+
+\bibitem{strassen1969}
+V.~Strassen,
+``Gaussian elimination is not optimal,''
+\emph{Numerische Mathematik},
+vol.~13, pp.~354--356, 1969.
+\href{https://doi.org/10.1007/BF02165411}
+{doi:10.1007/BF02165411}.
+
+\bibitem{openai2026}
+OpenAI,
+``An Upper Bound of $9/4$ for the Matrix Multiplication Exponent,''
+October 2, 2026.
+\url{https://github.com/openai/math/tree/main/preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026}.
+
+\end{thebibliography}
+
+\end{document}
