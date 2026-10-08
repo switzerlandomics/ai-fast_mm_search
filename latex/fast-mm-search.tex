@@ -12,6 +12,7 @@
 
 \renewcommand\Authfont{\normalsize}
 \renewcommand\Affilfont{\small}
+\setlength{\affilsep}{2pt}
 
 %%%% Page layout %%%%
 
@@ -35,7 +36,6 @@
 
 \usepackage{natbib}
 \setcitestyle{numbers,sort&compress}
-\usepackage{hypernat}
 
 %%%% Links %%%%
 
@@ -43,15 +43,16 @@
 \definecolor{natureblue}{RGB}{5,110,210}
 
 \usepackage[colorlinks]{hyperref}
+\urlstyle{same}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=natureblue,
     citecolor=natureblue,
-    filecolor=blue!50!black,
+    filecolor=natureblue,
     urlcolor=natureblue,
     pdftitle={
-       Automated search recovers exact rank-7 matrix multiplication
+        Automated search recovers exact rank-7 matrix multiplication
     },
     pdfauthor={Dylan Lawless},
     pdfsubject={
@@ -78,7 +79,6 @@
 Automated search recovers exact rank-7 matrix multiplication
 }
 
-
 %%%% Author and affiliations %%%%
 
 \newcommand{\QUANT}{1}
@@ -94,97 +94,119 @@ Automated search recovers exact rank-7 matrix multiplication
 \date{7 October 2026}
 
 \maketitle
-\begin{abstract}
-Recent work proving that the matrix-multiplication exponent satisfies
-$\omega \leq 9/4$ motivates the search for explicit finite algorithms
-with improved recursive complexity. We present
-\texttt{fast\_mm\_search}, a numerical-to-exact procedure that searches
-for bilinear matrix-multiplication decompositions from random
-coefficients, reconstructs exact identities, and verifies them using
-exact arithmetic. As a controlled validation, we specified only the
-$2\times2$, rank-7 problem and withheld Strassen's known construction.
-The search recovered an exact seven-product algorithm with integer
-coefficients and a representation different from the standard
-Strassen formula. Exact rational verification established equality
-for all 64 coefficients of the multiplication tensor. This blind
-recovery demonstrates that exact finite matrix-multiplication
-algorithms can be recovered automatically and provides a validated
-procedure for searching finite $(u,r)$ decompositions whose explicit
-solutions are unknown.
-\end{abstract}
 
+\begin{abstract}
+Strassen's rank-7 algorithm for $2\times2$ matrix multiplication gives
+recursive arithmetic exponent $\log_2 7 \simeq 2.80735$, while recent
+work proves the asymptotic bound $\omega\leq9/4$ over $\mathbb{C}$.
+This gap motivates the constructive search for explicit finite
+matrix-multiplication algorithms. We present
+\texttt{fast\_mm\_search}, a numerical-to-exact procedure that searches
+for bilinear decompositions from random coefficients, reconstructs
+rational candidates, and verifies them using exact arithmetic. With
+only the $2\times2$, rank-7 problem specified, and without supplying
+Strassen's coefficients, the search recovered an integer-coefficient
+seven-product identity whose factorisation differs from the standard
+Strassen formula. Exact rational verification matched all 64
+coefficients of the multiplication tensor. The result demonstrates
+that a nontrivial exact finite matrix-multiplication algorithm can be
+recovered automatically and establishes the procedure for searches at
+larger matrix orders and lower recursive exponents.
+\end{abstract}
 
 \section{Introduction}
 
-Strassen showed that $2\times2$ matrix multiplication can be computed
-with seven bilinear products instead of the eight used by the direct
-algorithm \cite{strassen1969}. Recursive application gives arithmetic
-exponent
+A rank-$r$ bilinear algorithm for multiplying $u\times u$ matrices
+gives recursive arithmetic exponent
 \[
-\log_2 7 \simeq 2.80735.
+\log_u r.
 \]
+Strassen showed that $2\times2$ matrix multiplication can be computed
+with seven scalar products instead of the eight used by direct
+multiplication \cite{strassen1969}. His $(u,r)=(2,7)$ construction
+therefore gives
+\[
+\log_2 7 \simeq 2.80735,
+\]
+establishing that the cubic exponent of direct matrix multiplication
+is not optimal.
 
-Recent work proves the stronger asymptotic bound
+The matrix-multiplication exponent $\omega$ describes the asymptotic
+arithmetic complexity of multiplying square matrices. Recent work
+proves
 \[
 \omega \leq \frac{9}{4}
 \]
-over $\mathbb{C}$ \cite{openai2026}. This motivates the constructive
-search for explicit finite matrix-multiplication decompositions with
-improved recursive complexity.
+over $\mathbb{C}$ \cite{openai2026}. This asymptotic result establishes
+that substantially lower complexity is possible, while leaving a
+constructive question: which explicit finite bilinear decompositions
+can realise improved recursive exponents?
 
-We developed \texttt{fast\_mm\_search} to search for such
-decompositions numerically, reconstruct candidate coefficients
-exactly, and verify the resulting identities independently. The
-$2\times2$, rank-7 problem provides a controlled validation because
-an exact solution is known while its coefficients are withheld from
-the search.
+We developed \texttt{fast\_mm\_search} to search for finite
+decompositions numerically, reconstruct candidate coefficients as
+exact rationals, and verify the resulting identities independently.
+The classical $(2,7)$ problem provides a controlled validation because
+an exact solution is known while its coefficients can be withheld
+from the search.
 
 \section{Methods}
 
-Let
+For square matrices of order $u$, let
 \[
-T \in \mathbb{Q}^{4\times4\times4}
+T_u \in \mathbb{Q}^{u^2\times u^2\times u^2}
 \]
-denote the tensor for $2\times2$ matrix multiplication. A rank-$r$
-bilinear algorithm has the decomposition
+denote the matrix-multiplication tensor. A rank-$r$ bilinear algorithm
+has the decomposition
 \[
-\widehat{T}
+\widehat{T}_u
 =
 \sum_{k=1}^{r}
-u_k \otimes v_k \otimes w_k,
+x_k \otimes y_k \otimes z_k,
 \]
-where $u_k$ and $v_k$ define linear forms in the entries of the two
-input matrices and $w_k$ distributes each bilinear product among the
-output entries.
+where $x_k$ and $y_k$ define linear forms in the entries of the two
+input matrices and $z_k$ distributes each bilinear product among the
+output entries. The dense parameterisation contains $3ru^2$ scalar
+coefficients before accounting for term-wise scaling symmetries.
 
-We fixed $r=7$ and optimised the coefficients from independent random
-initial values using L-BFGS-B. Candidates were ranked by relative
-tensor residual
+The search separates numerical discovery from exact proof:
+\[
+\text{random initialisation}
+\;\longrightarrow\;
+\text{numerical optimisation}
+\;\longrightarrow\;
+\text{rational reconstruction}
+\;\longrightarrow\;
+\text{exact verification}.
+\]
+The validation experiment used $u=2$ and $r=7$, giving 84 raw search
+coefficients. Independent random initial values were optimised with
+L-BFGS-B using the relative tensor residual
 \[
 \rho
 =
-\frac{\lVert T-\widehat{T}\rVert_F}
-     {\lVert T\rVert_F}.
+\frac{\lVert T_u-\widehat{T}_u\rVert_F}
+     {\lVert T_u\rVert_F}.
 \]
 
-Candidates reaching the numerical threshold were term-normalised,
-reconstructed as rational coefficients, and passed to a separate
-verifier using exact rational arithmetic. Numerical optimisation
-selects candidates; exact tensor equality determines acceptance.
+Candidates satisfying $\rho<10^{-6}$ were term-normalised and
+reconstructed as rational coefficients with denominator bounded by
+16. A separate verifier then evaluated the complete multiplication
+tensor using exact rational arithmetic. For matrix order $u$, this
+checks all $u^6$ tensor coefficients and accepts a candidate only when
+every coefficient agrees exactly with $T_u$.
 
 \section{Results}
 
-The campaign evaluated 581 independent random initialisations. The
-lowest numerical residual,
-\[
-1.596061\times10^{-8},
-\]
-occurred at seed 482 and did not yield an exact verified identity.
-Seed 581 converged after 140 L-BFGS-B iterations to
+The blind $(2,7)$ search recovered an exact rank-7
+integer-coefficient identity. Before exact reconstruction, the
+accepted numerical candidate had relative residual
 \[
 \rho = 3.093299\times10^{-8}.
 \]
-Exact reconstruction produced coefficients with denominator one.
+Another candidate reached the smaller residual
+$1.596061\times10^{-8}$ but did not yield an exactly verified
+identity. Numerical proximity therefore identified candidates without
+determining exact recoverability.
 
 For
 \[
@@ -223,7 +245,7 @@ P_2-P_4-P_6-P_7
 \end{pmatrix}.
 \]
 
-Expansion gives
+Direct expansion gives
 \[
 AB=
 \begin{pmatrix}
@@ -231,32 +253,76 @@ ae+bg & af+bh\\
 ce+dg & cf+dh
 \end{pmatrix}.
 \]
-
-Exact verification evaluated all
+The independent verifier evaluated all
 \[
-4\times4\times4=64
+2^6=64
 \]
-coefficients of the multiplication tensor. All coefficients matched,
-giving zero mismatches and maximum exact residual zero.
+coefficients of the multiplication tensor using exact rational
+arithmetic. All coefficients matched, giving zero mismatches and zero
+exact residual.
 
 \section{Discussion}
 
 The recovered identity attains the classical rank-7 bound for
-$2\times2$ matrix multiplication. Its coefficient representation
-differs from the standard presentation of Strassen's construction,
-and it was recovered from random initial coefficients without access
-to Strassen's formula.
+$2\times2$ matrix multiplication. It was obtained from random initial
+coefficients without access to Strassen's construction, and its
+displayed bilinear products differ from the standard presentation of
+Strassen's formula. The result therefore establishes automated
+recovery and exact verification of a nontrivial finite
+matrix-multiplication algorithm; it does not claim a new rank bound.
 
-The campaign also separates numerical approximation from mathematical
-verification. Seed 482 attained the lowest floating-point residual,
-while seed 581 produced the first exactly reconstructable identity.
-The numerical objective alone therefore does not determine whether a
-candidate admits the exact representation required for proof.
+Numerical optimisation and exact verification answer different
+questions. The smallest floating-point residual observed in the
+campaign did not produce the exactly verified identity, showing that
+residual magnitude alone cannot establish a bilinear algorithm.
+Rational reconstruction followed by coefficient-wise verification
+converts a numerical candidate into an exact tensor equality.
 
-This experiment validates the numerical search, exact reconstruction,
-and independent verification pipeline. The same procedure can now be
-applied to finite $(u,r)$ problems whose explicit decompositions are
-unknown.
+For a finite square decomposition, recursive complexity improves on
+Strassen whenever
+\[
+\log_u r < \log_2 7,
+\]
+equivalently
+\[
+r < u^{\log_2 7}.
+\]
+At $u=3$,
+\[
+3^{\log_2 7} \simeq 21.85,
+\]
+so $r=21$ is the largest integer rank at this order that would improve
+on recursive Strassen:
+\[
+\log_3 21 \simeq 2.77124 < 2.80735.
+\]
+The pair $(3,21)$ therefore defines a natural finite search boundary
+beyond the $(2,7)$ validation problem.
+
+The corresponding dense parameterisation grows from
+\[
+3\times7\times2^2 = 84
+\]
+raw coefficients for $(2,7)$ to
+\[
+3\times21\times3^2 = 567
+\]
+for $(3,21)$, while the multiplication tensor grows from
+\[
+2^6=64
+\qquad\text{to}\qquad
+3^6=729
+\]
+coefficients. The increase quantifies the computational step from the
+validation problem to a finite target whose exact solution would
+already cross the Strassen exponent.
+
+A rank-21 $3\times3$ algorithm would give exponent approximately
+$2.77124$, still well above the asymptotic bound $9/4=2.25$. The
+$9/4$ theorem therefore supplies an asymptotic benchmark rather than
+a claim that a small $(3,21)$ decomposition must exist. The present
+result establishes a numerical-to-exact mechanism for searching
+finite rules and certifying any recovered identity independently.
 
 \section*{Code availability}
 
