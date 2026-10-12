@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+title: "fast_mm: Automated search for exact matrix-multiplication algorithms"
+authors:
+  - family-names: Lawless
+    given-names: Dylan
+    orcid: "https://orcid.org/0000-0001-8496-3725"
+repository-code: "https://github.com/switzerlandomics/ai-fast_mm_search"
+url: "https://github.com/switzerlandomics/ai-fast_mm_search"
+abstract: >-
+  Python software for searching for finite matrix-multiplication algorithms
+  through numerical optimisation, exact coefficient reconstruction, and
+  independent verification of bilinear identities.
+keywords:
+  - matrix multiplication
+  - bilinear algorithms
+  - numerical optimisation
+  - exact reconstruction
+  - exact verification
